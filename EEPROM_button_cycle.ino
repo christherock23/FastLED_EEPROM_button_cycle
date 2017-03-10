@@ -8,6 +8,7 @@
 //value being 255 (or atleast thats the default value on the 
 //Atmega32u4.
 
+//Include these files if you want your code to work!
 #include "FastLED.h"
 #include "Patterns.h"
 #include "Buttons.h"
@@ -19,11 +20,14 @@ FASTLED_USING_NAMESPACE
 #warning "Requires FastLED 3.1 or later; check github for latest code."
 #endif
 
-#define DATA_PIN    17
-#define LED_TYPE    WS2812B
-#define COLOR_ORDER GRB
+#define DATA_PIN    17        //Pin your LEDS are connected to
+#define LED_TYPE    WS2812B   //Type of LEDS you are using
+#define COLOR_ORDER GRB       //Order of LEDS inside your LEDS, GRB for WS2812B
 
-#define BRIGHTNESS          96
+#define BRIGHTNESS          96  //set brightness between 0 and 255, you can also
+                                //add another button to save this value but for 
+                                //the sake of simplicity brightness is a set value
+                                //in this program
 #define FRAMES_PER_SECOND  120
 
 void setup() {
@@ -52,6 +56,7 @@ uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
   
 void loop()
 {
+  //Call the pattern currently stored in EEPROM address 1
   gCurrentPatternNumber = EEPROM.read(1);
   // Call the current pattern function once, updating the 'leds' array
   gPatterns[gCurrentPatternNumber]();
@@ -61,9 +66,9 @@ void loop()
   // insert a delay to keep the framerate modest
   FastLED.delay(1000/FRAMES_PER_SECOND); 
 
-  // do some periodic updates
   EVERY_N_MILLISECONDS( 20 ) { gHue++; } // slowly cycle the "base color" through the rainbow
-  if(buttonListener()) { nextPattern(); }
+  
+  if(buttonListener()) { nextPattern(); } //Check if the buttom has been pressed
 }
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
@@ -72,5 +77,5 @@ void nextPattern()
 {
   // add one to the current pattern number, and wrap around at the end
   gCurrentPatternNumber = (gCurrentPatternNumber + 1) % ARRAY_SIZE( gPatterns);
-  EEPROM.write(1, gCurrentPatternNumber);
+  EEPROM.write(1, gCurrentPatternNumber); //Save new pattern to EEPROM address 1
 }

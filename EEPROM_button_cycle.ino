@@ -1,6 +1,13 @@
 //Based on FastLED 100 lines of code demo reel by Mark Kriegsman
 //Please join the FastLED community on Google+ these guys rock!
 
+//If this is your first time using EEPROM the LEDS will be 
+//blank at first, simply press the button to store the new 
+//pattern value which will be the second on the list. There
+//should be no problems after this, this is due to the default
+//value being 255 (or atleast thats the default value on the 
+//Atmega32u4.
+
 #include "FastLED.h"
 #include "Patterns.h"
 #include "Buttons.h"
